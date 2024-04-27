@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор IPv4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url(bck.png);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size: cover;
+        }
+        
+        h1 {;
+            text-align: center;
+            margin-top: -20px;
+            color: #716868;
+            text-shadow: 0 0 10px #FCFCFC, 0 0 20px #FCFCFC, 0 0 40px #FCFCFC
+        }
+        p {
+            color: #716868;
+            text-shadow: 0 0 10px #FCFCFC, 0 0 20px #FCFCFC, 0 0 40px #FCFCFC
+        }
+        
+        #ip_address {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        
+        #ip_address:focus {
+            border-color: #007bff;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #716868;
+            color: #fff;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #575757;
+            box-shadow: 0 0 10px #FCFCFC, 0 0 20px #FCFCFC, 0 0 40px #FCFCFC;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff0000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+    <script>
+        function showNotification(message) {
+            var notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            notification.style.display = 'block';
+            setTimeout(function() {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+        
+        function generateIPAddresses() {
+            var ipAddress = document.getElementById('ip_address').value;
+            var ipAddressParts = ipAddress.split('.');
+            var ipAddresses = [];
+            
+            for (var i = 0; i <= 255; i++) {
+                ipAddresses.push(ipAddressParts.slice(0, 3).join('.') + '.' + i);
+            }
+            
+            showNotification('Сгенерировано!');
+            return ipAddresses.join('\n');
+        }
+        
+        function copyToClipboard() {
+            var ipAddresses = generateIPAddresses();
+            var tempInput = document.createElement('textarea');
+            tempInput.value = ipAddresses;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showNotification('Скопировано!');
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <h1>IPv4 генератор</h1>
+        <p>Введите первые три числа IPv4:</p>
+        <input type="text" id="ip_address" placeholder="Пример: 1.1.1">
+        <br>
+        <button onclick="generateIPAddresses()">Сгенерировать</button>
+        <button onclick="copyToClipboard()">Скопировать</button>
+        <div id="result">
+        </div>
+    </div>
+</body>
+</html>
